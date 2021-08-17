@@ -1,0 +1,98 @@
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+from sklearn.preprocessing import MinMaxScaler
+
+from google.colab import files
+uploaded = files.upload()
+
+test = pd.read_csv("HousingData.csv")
+
+test.isnull()
+
+testdrop = test.dropna()
+print(testdrop.isnull())
+test = test.fillna(test.mode().iloc[0])
+
+from pandas import DataFrame
+from matplotlib import pyplot
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+scaled = scaler.fit_transform(test)
+print("Min Max scaled data:",scaled)
+dataset = DataFrame(test)
+dataset.hist()
+pyplot.show()
+
+plt.plot(test['CRIM'],label='CRIM')
+plt.plot(test['ZN'],label='ZN')
+plt.plot(test['INDUS'],label='INDUS')
+plt.plot(test['CHAS'],label='CHAS')
+plt.plot(test['NOX'],label='NOX')
+plt.plot(test['RM'],label='RM')
+plt.plot(test['AGE'],label='AGE')
+plt.plot(test['DIS'],label='DIS')
+plt.plot(test['RAD'],label='RAD')
+plt.plot(test['TAX'],label='TAX')
+plt.plot(test['PTRATIO'],label='PTRATIO')
+plt.plot(test['B'],label='B')
+plt.plot(test['LSTAT'],label='LSTAT')
+plt.plot(test['MEDV'],label='MEDV')
+plt.legend(loc='upper left')
+y=np.arange(0,700,50)
+x =np.arange(0,500,50)
+
+import seaborn as sns
+plt.figure(figsize=(20,20))
+sns.heatmap(test.corr(), cbar=True, square= True, fmt='.1f', annot=True, annot_kws={'size':15}, cmap='Reds')
+
+for data in test:
+  sns.displot(test[data])
+  plt.xlabel(data)
+plt.tight_layout()
+plt.show()
+
+for data in test:
+  sns.scatterplot(x=test['TAX'],y=test[data])
+  plt.xlabel('tax')
+  plt.ylabel(data)
+  plt.show()
+  plt.tight_layout()
+
+sns.pairplot(test)
+
+sns.boxplot(data=test)
+plt.show()
+
+predictor = test[["RM"]]
+target = test[["MEDV"]]
+plt.scatter(predictor,target)
+
+from sklearn.model_selection import train_test_split
+X = test.drop('MEDV',axis=1)
+y = test['MEDV']
+print(test.shape)
+print(X.shape)
+print(y.shape)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+print("X_train: ", X_train.shape)
+print("X_test: ", X_test.shape)
+print("y_train: ", y_train.shape)
+print("y_test: ", y_test.shape)
+
+from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
+
+model = LinearRegression()
+
+model.fit(X_train, y_train)
+
+model.intercept_
+
+coeff_df = pd.DataFrame(regressor.coef_,X.columns,columns=['Coefficient'])
+coeff_df
+
